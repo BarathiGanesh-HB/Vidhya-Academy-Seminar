@@ -71,20 +71,23 @@ def extract_features(tweets, batch_size=500, test_file=True, feat_type='presence
 def process_tweets(csv_file, test_file=True):
     tweets = []
     print 'Generating feature vectors'
-    with open(csv_file, 'r') as csv:
-        lines = csv.readlines()
-        total = len(lines)
-        for i, line in enumerate(lines):
-            if test_file:
-                tweet_id, tweet = line.split(',')
-            else:
-                tweet_id, sentiment, tweet = line.split(',')
-            feature_vector = get_feature_vector(tweet)
-            if test_file:
-                tweets.append((tweet_id, feature_vector))
-            else:
-                tweets.append((tweet_id, int(sentiment), feature_vector))
-            utils.write_status(i + 1, total)
+    try:
+        with open(csv_file, 'r') as csv:
+            lines = csv.readlines()
+            total = len(lines)
+            for i, line in enumerate(lines):
+                if test_file:
+                    tweet_id, tweet = line.split(',')
+                else:
+                    tweet_id, sentiment, tweet = line.split(',')
+                feature_vector = get_feature_vector(tweet)
+                if test_file:
+                    tweets.append((tweet_id, feature_vector))
+                else:
+                    tweets.append((tweet_id, int(sentiment), feature_vector))
+                utils.write_status(i + 1, total)
+    except ValueError:
+        pass
     print '\n'
     return tweets
 
